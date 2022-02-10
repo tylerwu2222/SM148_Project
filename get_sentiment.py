@@ -3,7 +3,8 @@ import pandas as pd
 from textblob import TextBlob
 
 # Read in dataset
-df = pd.read_csv('tweet_data/model_test_data.csv')
+# df = pd.read_csv('tweet_data/model_test_data.csv')
+df = pd.read_csv('merged_test_data.csv')
 
 #print(df.shape)
 
@@ -23,6 +24,6 @@ df.insert(12, 'Subjectivity', subjectivity)
 #print(df.shape)
 
 # Write to a csv
-df.to_csv('model_test_data_with_sentiment.csv')
+df.to_csv('merged_test_data_with_sentiment.csv')
 
 
