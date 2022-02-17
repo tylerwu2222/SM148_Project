@@ -21,6 +21,8 @@ from scipy.stats import chi2_contingency
 df = pd.read_csv("C:/ucla/m148/SM148_project/merged_test_data_with_sentiment.csv")
 len(df.index)
 
+pd.set_option('display.max_columns', None) # <- just to display all the columes
+
 df.head()
 
 
@@ -141,7 +143,7 @@ p
 # for data merged_data_with_sentiment_and_CA_LA.csv:
 df = pd.read_csv("C:/ucla/m148/SM148_project/merged_data_with_sentiment_and_CA_LA.csv")
 len(df.index)
-
+df.head()
 # try only positive and negative: (significant)
 # Split Polarity into three categories, save as a addition column (-1 to 0: negative; 0 to 1: positive):
 df['Pol_cat'] = 'neutral'
@@ -198,6 +200,91 @@ c, p, dof, expected = chi2_contingency(contigency)
 p
 # p-value in this case is 0.6907777601096385, we do not reject null hypothesis; 
 # there is no relationship between mask mandates and sentiment in LA.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# for data complete_data.csv:
+df = pd.read_csv("C:/ucla/m148/SM148_project/complete_data.csv")
+len(df.index)
+df.head()
+# try only positive and negative: (significant)
+# Split Polarity into three categories, save as a addition column (-1 to 0: negative; 0 to 1: positive):
+df['Pol_cat'] = 'neutral'
+df.loc[df['Polarity'] < 0, 'Pol_cat'] = 'negative'
+df.loc[df['Polarity'] > 0, 'Pol_cat'] = 'positive'
+df.head()
+
+# Create a contigency table
+contigency = pd.crosstab(df['Face_Masks_Required_in_Public'], df['Pol_cat'])
+contigency
+
+# Chi-square:
+c, p, dof, expected = chi2_contingency(contigency)
+p
+# p-value in this case is 0.031708755291222995, we reject null hypothesis; there is a relationship between mask mandates and sentiment.
+
+
+
+# filter mentions_mask:
+df = df[df['mentions_mask'] == True]
+
+# By CA:
+CA = df[df['CA'] =="Yes"]
+CA.head()
+CA['Pol_cat'] = 'neutral'
+CA.loc[CA['Polarity'] < 0, 'Pol_cat'] = 'negative'
+CA.loc[CA['Polarity'] > 0, 'Pol_cat'] = 'positive'
+CA.head()
+
+# Create a contigency table
+contigency = pd.crosstab(CA['Face_Masks_Required_in_Public'], CA['Pol_cat'])
+contigency
+
+# Chi-square:
+c, p, dof, expected = chi2_contingency(contigency)
+p
+# p-value in this case is 0.3099430827650828, we do not reject null hypothesis; 
+# there is no relationship between mask mandates and sentiment in CA.
+
+
+# By LA:
+la = df[df['LA'] =="Yes"]
+la.head()
+la['Pol_cat'] = 'neutral'
+la.loc[la['Polarity'] < 0, 'Pol_cat'] = 'negative'
+la.loc[la['Polarity'] > 0, 'Pol_cat'] = 'positive'
+la.head()
+
+# Create a contigency table
+contigency = pd.crosstab(la['Face_Masks_Required_in_Public'], la['Pol_cat'])
+contigency
+
+# Chi-square:
+c, p, dof, expected = chi2_contingency(contigency)
+p
+# p-value in this case is 0.021620743304157187, we reject null hypothesis; 
+# there is a relationship between mask mandates and sentiment in LA.
+
+
+
+
+
 
 
 
