@@ -14,34 +14,18 @@ from scipy.stats import chi2_contingency
 
 
 
+
+
+
 # for data merged_test_data_with_sentiment:
-df1 = pd.read_csv("C:/ucla/m148/SM148_project/mask_mandate_no_na_smaller.csv")  # <- read file
 df = pd.read_csv("C:/ucla/m148/SM148_project/merged_test_data_with_sentiment.csv")
 len(df.index)
 
 df.head()
-df1.head()
-
-# Split Polarity into three categories, save as a addition column (-1 to -0.5: negative; -0.5 to 0.5: neutral; 0.5 to 1: positive):
-# check the summary of "Polarity" 
-df.describe()
-# the addition column "Pol_cat"
-df['Pol_cat'] = 'neutral'
-df.loc[df['Polarity'] <= -0.5, 'Pol_cat'] = 'negative'
-df.loc[df['Polarity'] >= 0.5, 'Pol_cat'] = 'positive'
-df.head()
-
-# Create a contigency table
-contigency = pd.crosstab(df['Face_Masks_Required_in_Public'], df['Pol_cat'])
-contigency
-
-# Chi-square:
-c, p, dof, expected = chi2_contingency(contigency)
-p
-# p_value is 0.14230417805646303, which is less than 0.05, do not reject null hypothesis;
 
 
-# try only positive and negative:
+# try only positive and negative: (significant)
+# Split Polarity into three categories, save as a addition column (-1 to 0: negative; 0 to 1: positive):
 df['Pol_cat'] = 'neutral'
 df.loc[df['Polarity'] < 0, 'Pol_cat'] = 'negative'
 df.loc[df['Polarity'] > 0, 'Pol_cat'] = 'positive'
@@ -55,8 +39,6 @@ contigency
 c, p, dof, expected = chi2_contingency(contigency)
 p
 # p-value in this case is 0.006674082539693579, we reject null hypothesis; there is a relationship between mask mandates and sentiment.
-
-
 
 
 
@@ -120,6 +102,102 @@ p
 
 
 
+
+
+
+
+
+
+
+
+
+# testing other values to split polarity column:
+# Split Polarity into three categories, save as a addition column (-1 to -0.5: negative; -0.5 to 0.5: neutral; 0.5 to 1: positive):
+# check the summary of "Polarity" 
+df.describe()
+# the addition column "Pol_cat"
+df['Pol_cat'] = 'neutral'
+df.loc[df['Polarity'] <= -0.5, 'Pol_cat'] = 'negative'
+df.loc[df['Polarity'] >= 0.5, 'Pol_cat'] = 'positive'
+df.head()
+
+# Create a contigency table
+contigency = pd.crosstab(df['Face_Masks_Required_in_Public'], df['Pol_cat'])
+contigency
+
+# Chi-square:
+c, p, dof, expected = chi2_contingency(contigency)
+p
+# p_value is 0.14230417805646303, which is less than 0.05, do not reject null hypothesis;
+
+
+
+
+
+
+
+
+
+# for data merged_data_with_sentiment_and_CA_LA.csv:
+df = pd.read_csv("C:/ucla/m148/SM148_project/merged_data_with_sentiment_and_CA_LA.csv")
+len(df.index)
+
+# try only positive and negative: (significant)
+# Split Polarity into three categories, save as a addition column (-1 to 0: negative; 0 to 1: positive):
+df['Pol_cat'] = 'neutral'
+df.loc[df['Polarity'] < 0, 'Pol_cat'] = 'negative'
+df.loc[df['Polarity'] > 0, 'Pol_cat'] = 'positive'
+df.head()
+
+# Create a contigency table
+contigency = pd.crosstab(df['Face_Masks_Required_in_Public'], df['Pol_cat'])
+contigency
+
+# Chi-square:
+c, p, dof, expected = chi2_contingency(contigency)
+p
+# p-value in this case is 0.031708755291222995, we reject null hypothesis; there is a relationship between mask mandates and sentiment.
+
+
+
+
+
+# By CA:
+CA = df[df['CA'] =="Yes"]
+CA.head()
+CA['Pol_cat'] = 'neutral'
+CA.loc[CA['Polarity'] < 0, 'Pol_cat'] = 'negative'
+CA.loc[CA['Polarity'] > 0, 'Pol_cat'] = 'positive'
+CA.head()
+
+# Create a contigency table
+contigency = pd.crosstab(CA['Face_Masks_Required_in_Public'], CA['Pol_cat'])
+contigency
+
+# Chi-square:
+c, p, dof, expected = chi2_contingency(contigency)
+p
+# p-value in this case is 0.997104260516142, we do not reject null hypothesis; 
+# there is no relationship between mask mandates and sentiment in CA.
+
+
+# By LA:
+la = df[df['LA'] =="Yes"]
+la.head()
+la['Pol_cat'] = 'neutral'
+la.loc[la['Polarity'] < 0, 'Pol_cat'] = 'negative'
+la.loc[la['Polarity'] > 0, 'Pol_cat'] = 'positive'
+la.head()
+
+# Create a contigency table
+contigency = pd.crosstab(la['Face_Masks_Required_in_Public'], la['Pol_cat'])
+contigency
+
+# Chi-square:
+c, p, dof, expected = chi2_contingency(contigency)
+p
+# p-value in this case is 0.6907777601096385, we do not reject null hypothesis; 
+# there is no relationship between mask mandates and sentiment in LA.
 
 
 
