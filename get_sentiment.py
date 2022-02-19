@@ -4,7 +4,7 @@ from textblob import TextBlob
 
 # Read in dataset
 # df = pd.read_csv('tweet_data/model_test_data.csv')
-df = pd.read_csv('merged_test_data.csv',
+df = pd.read_csv('merged_data.csv',
     dtype={'text': 'str'})
 print(df.dtypes)
 print(df.columns)

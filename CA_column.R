@@ -1,7 +1,7 @@
 df <- read.csv('merged_data_with_sentiment.csv')
-
+# install.packages('vscDebugger')
 library(stringr)
-
+head(df)
 la_ind <- character(nrow(df))
 ca_ind <- character(nrow(df))
 for (i in 1:nrow(df)) {
