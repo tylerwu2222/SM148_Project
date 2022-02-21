@@ -1,0 +1,65 @@
+---
+title: "tyler models"
+output: pdf_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+# select columns to model with
+- goal: predicting sentiment (polarity)/subjectivity with other columns
+```{r}
+data = read_csv("../complete_data/complete_data_cases.csv")
+head(data)
+```
+```{r}
+CA_data <- data %>% filter(CA == "Yes")
+LA_data <- data %>% filter(LA == "Yes")
+nrow(CA_data)
+nrow(LA_data)
+```
+
+```{r}
+colnames(CA_data)
+```
+
+# testing lm only mask mandate
+- low R^2, expected since many other things explain sentiment?
+```{r}
+predictors = colnames(CA_data)[c(5,6,15,21,24,25,26,32)] # likes, retweets, mandate, text mentions mask, confirmed cases, deaths, recovered, tested people
+
+CA_lin_sent1 <- lm(formula=as.formula(paste("Polarity",predictors[3],sep="~")),
+                    data=CA_data,
+                    family="gaussian")
+summary(CA_lin_sent1)
+```
+
+### mask mandates and mentions mask
+- sentiment is significantly different in tweets that do & don't mention mask
+- but still very low significance
+```{r}
+CA_lin_sent2 <- lm(formula=as.formula(paste("Polarity",paste(predictors[c(3,4)],
+                                                              collapse="+"),sep="~")),
+                    data = CA_data,
+                    family = "gaussian")
+summary(CA_lin_sent2)
+```
+
+### only covid stats
+- none significant...
+- negative R^2...
+```{r}
+CA_lin_sent3 <- lm(formula=as.formula(paste("Polarity",paste(predictors[c(5:8)],
+                                                              collapse="+"),sep="~")),
+                    data = CA_data,
+                    family = "gaussian")
+summary(CA_lin_sent3)
+```
+
+# ridge/lasso/elastic regression?
+```{r}
+
+```
+
+#
