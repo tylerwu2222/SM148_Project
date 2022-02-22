@@ -35,7 +35,7 @@ df.loc[df['mentions_mask'] == True, 'masks_num'] = 1
 df['required_masks'] = 0
 df.loc[df['Face_Masks_Required_in_Public'] == 'Yes', 'required_masks'] = 1 
 
-x, y = df[['masks_num', 'required_masks', 'likes']], df['Pol_cat']
+x, y = df[['masks_num', 'required_masks']], df['Pol_cat']
 x.shape
 
 
@@ -52,6 +52,8 @@ scores.mean()
 # cross validation mean score for SVM is only 0.44607794717460314.
 
 
+# add the "likes" as one of the predictors.
+x, y = df[['masks_num', 'required_masks', 'likes']], df['Pol_cat']
 
 # trying logistic regression model.
 model = LogisticRegression()
