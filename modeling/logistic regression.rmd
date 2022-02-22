@@ -1,0 +1,64 @@
+---
+title: "stat dogs modeling"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## logistic regression
+
+## omitting NA's
+## numerical Polarity
+```{r}
+# data
+set.seed(1)
+
+mydata <- read.csv("~/Desktop/merged_test_data_with_sentiment.csv", comment.char="#")
+
+# turn categorical variables into factors
+mydata$Face_Masks_Required_in_Public <- as.factor(mydata$Face_Masks_Required_in_Public)
+
+# polarity
+mydata <- na.omit(mydata)
+dt <- sort(sample(nrow(mydata), nrow(mydata)*.7))
+train1 <- mydata[dt,]
+test1 <- mydata[-dt,]
+polarity_model <- glm(Polarity ~ Face_Masks_Required_in_Public, data = train1)
+summary(polarity_model)
+
+library(stats)
+confint(polarity_model)
+
+# subjectivity
+subjectivity_model <- glm(Subjectivity ~ Face_Masks_Required_in_Public, data = train1)
+summary(subjectivity_model)
+
+```
+Results: P value of 0.04 for relationship between facemasksYes and Polarity
+
+
+# categorical polarity
+```{r}
+# polarity
+mydata2 <- na.omit(mydata)
+mydata2$Polarity[mydata2$Polarity <= -0.05] <- "negative"
+mydata2$Polarity[mydata2$Polarity >= 0.05] <- "positive"
+mydata2$Polarity[mydata2$Polarity < 0.05 & mydata2$Polarity > -0.05] <- "neutral"
+mydata2$Face_Masks_Required_in_Public <- as.factor(mydata2$Face_Masks_Required_in_Public)
+mydata2$Polarity <- as.factor(mydata2$Polarity)
+
+dt <- sort(sample(nrow(mydata2), nrow(mydata2)*.7))
+train2<-mydata2[dt,]
+test2<-mydata2[-dt,]
+
+polarity_model2 <- glm(Polarity ~ Face_Masks_Required_in_Public, family = "binomial", data = train2)
+
+summary(polarity_model2)
+
+# subjectivity
+subjectivity_model <- glm(Subjectivity ~ Face_Masks_Required_in_Public, data = mydata)
+summary(subjectivity_model)
+
+```
