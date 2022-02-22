@@ -1,3 +1,4 @@
+from pyexpat import model
 import tweepy
 import pandas as pd
 import numpy as np
@@ -12,6 +13,7 @@ from sklearn import svm
 from sklearn.model_selection import cross_val_score
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
 
 
 # read data:
@@ -33,7 +35,7 @@ df.loc[df['mentions_mask'] == True, 'masks_num'] = 1
 df['required_masks'] = 0
 df.loc[df['Face_Masks_Required_in_Public'] == 'Yes', 'required_masks'] = 1 
 
-x, y = df[['masks_num', 'required_masks']], df['Pol_cat']
+x, y = df[['masks_num', 'required_masks', 'likes']], df['Pol_cat']
 x.shape
 
 
@@ -47,10 +49,12 @@ clf.score(x_test, y_test)
 clf = svm.SVC(kernel = 'linear', C = 1, random_state = 42)
 scores = cross_val_score(clf, x, y, cv = 5)
 scores.mean()
-
 # cross validation mean score for SVM is only 0.44607794717460314.
 
 
 
 # trying logistic regression model.
-
+model = LogisticRegression()
+scores = cross_val_score(model, x, y, scoring = 'accuracy', cv =10)
+scores.mean()
+# cross validation mean score for SVM is only 0.4460779473034691.
