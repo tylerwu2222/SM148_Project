@@ -23,6 +23,33 @@ nrow(LA_data)
 ```{r}
 colnames(CA_data)
 ```
+```{r}
+max(CA_data$Confirmed,na.rm=T)
+```
+
+# try plotting sentiment over time?
+```{r}
+
+fit1 <- lm(Polarity~Confirmed, data=CA_data)
+fit2 <- lm(Polarity~poly(Confirmed,2,raw=TRUE), data=CA_data)
+fit3 <- lm(Polarity~poly(Confirmed,3,raw=TRUE), data=CA_data)
+# fit4 <- lm(Polarity~poly(date,4,raw=TRUE), data=CA_data)
+# fit5 <- lm(Polarity~poly(date,5,raw=TRUE), data=CA_data)
+
+#create a scatterplot of x vs. y
+plot(CA_data$Confirmed, CA_data$Polarity, pch=19, xlab='x', ylab='y')
+
+#define x-axis values
+x_axis <- seq(0, max(CA_data$Confirmed,na.rm=T))
+
+#add curve of each model to plot
+lines(x_axis, predict(fit1, data.frame(Confirmed=x_axis)), col='green')
+lines(x_axis, predict(fit2, data.frame(Confirmed=x_axis)), col='red')
+lines(x_axis, predict(fit3, data.frame(Confirmed=x_axis)), col='purple')
+# lines(x_axis, predict(fit4, data.frame(x=x_axis)), col='blue')
+# lines(x_axis, predict(fit5, data.frame(x=x_axis)), col='orange')
+```
+
 
 # testing lm only mask mandate
 - low R^2, expected since many other things explain sentiment?
