@@ -12,6 +12,81 @@ from scipy.stats import chi2_contingency
 
 
 
+# read the data "complete_data_sentiment":
+df = pd.read_csv("C:/ucla/m148/SM148_project/complete_data/complete_data_sentiment.csv")
+pd.set_option('display.max_columns', None) # <- just to display all the columes
+
+df.head()
+contigency = pd.crosstab(df['Face_Masks_Required_in_Public'], df['polarity_classif'])
+contigency
+
+# Chi-square:
+c, p, dof, expected = chi2_contingency(contigency)
+p
+# p-value in this case is 2.098024500598182e-05, we reject null hypothesis; there is a relationship between mask mandates and sentiment.
+
+
+
+# for data in CA:
+CA = df[df['CA'] =="Yes"]
+CA.head()
+contigency = pd.crosstab(CA['Face_Masks_Required_in_Public'], CA['polarity_classif'])
+contigency
+
+# Chi-square:
+c, p, dof, expected = chi2_contingency(contigency)
+p
+# p-value in this case is 0.0657252141585145, we do not reject null hypothesis; there is no relationship between mask mandates and sentiment.
+
+
+
+# trying data in LA:
+LA = df[df.city_and_state =="Los Angeles, California"]
+LA.head()
+contigency = pd.crosstab(LA['Face_Masks_Required_in_Public'], LA['polarity_classif'])
+contigency
+
+# Chi-square:
+c, p, dof, expected = chi2_contingency(contigency)
+p
+# p-value in this case is 0.7898387158846932, we do not reject null hypothesis; there is no relationship between mask mandates and sentiment.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
