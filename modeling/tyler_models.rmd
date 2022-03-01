@@ -1,0 +1,118 @@
+---
+title: "tyler models"
+output: pdf_document
+---
+
+```{r}
+library(tidyverse)
+```
+
+# select columns to model with
+- goal: predicting sentiment (polarity)/subjectivity with other columns
+```{r}
+data = read_csv("../complete_data/complete_data_sentiment.csv")
+head(data)
+```
+```{r}
+CA_data <- data %>% filter(CA == "Yes")
+LA_data <- data %>% filter(LA == "Yes")
+nrow(CA_data)
+nrow(LA_data)
+```
+
+# try plotting sentiments over time?
+```{r}
+
+# fit1 <- lm(polarity_pos~Confirmed, data=CA_data)
+# fit2 <- lm(polarity_pos~poly(Confirmed,2,raw=TRUE), data=CA_data)
+# fit3 <- lm(polarity_pos~poly(Confirmed,3,raw=TRUE), data=CA_data)
+# fit4 <- lm(Polarity~poly(date,4,raw=TRUE), data=CA_data)
+# fit5 <- lm(Polarity~poly(date,5,raw=TRUE), data=CA_data)
+
+#create a scatterplot of x vs. y
+mean(CA_data$polarity_pos) 
+mean(CA_data$polarity_neg) # slightly more negative...
+mean(CA_data$polarity_classif) # even balance of pos/neg
+plot(CA_data$Confirmed, CA_data$polarity_pos, pch=19, xlab='x', ylab='y')
+plot(CA_data$Confirmed, CA_data$polarity_neg, pch=19, xlab='x', ylab='y')
+
+#define x-axis values
+# x_axis <- seq(0, max(CA_data$Confirmed,na.rm=T))
+
+#add curve of each model to plot
+# lines(x_axis, predict(fit1, data.frame(Confirmed=x_axis)), col='green')
+# lines(x_axis, predict(fit2, data.frame(Confirmed=x_axis)), col='red')
+# lines(x_axis, predict(fit3, data.frame(Confirmed=x_axis)), col='purple')
+# lines(x_axis, predict(fit4, data.frame(x=x_axis)), col='blue')
+# lines(x_axis, predict(fit5, data.frame(x=x_axis)), col='orange')
+```
+
+```{r}
+colnames(CA_data)
+```
+
+```{r}
+predictors = colnames(CA_data)[c(4,5,14,16,20,23,24,25,32)]
+predictors
+```
+
+
+# testing lm only mask mandate
+- low R^2, expected since many other things explain sentiment?
+```{r}
+CA_lin_sent1 <- lm(formula=as.formula(paste("Polarity",predictors[3],sep="~")),
+                    data=CA_data,
+                    family="gaussian")
+CA_lin_sent1a <- lm(formula=as.formula(paste("polarity_classif",predictors[3],sep="~")),
+                    data=CA_data,
+                    family="gaussian")
+summary(CA_lin_sent1)
+summary(CA_lin_sent1a)
+```
+
+### mask mandates and mentions mask
+- sentiment is significantly different in tweets that do & don't mention mask
+- but still very low significance
+```{r}
+CA_lin_sent2 <- lm(formula=as.formula(paste("Polarity",paste(predictors[c(3,5)],
+                                                              collapse="+"),sep="~")),
+                    data = CA_data,
+                    family = "gaussian")
+CA_lin_sent2a <- lm(formula=as.formula(paste("polarity_classif",paste(predictors[c(3,5)],
+                                                              collapse="+"),sep="~")),
+                    data = CA_data,
+                    family = "gaussian")
+summary(CA_lin_sent2)
+summary(CA_lin_sent2a)
+```
+
+### only covid stats
+- none significant...
+- negative R^2...
+```{r}
+CA_lin_sent3 <- lm(formula=as.formula(paste("Polarity",paste(predictors[c(6:9)],
+                                                              collapse="+"),sep="~")),
+                    data = CA_data,
+                    family = "gaussian")
+CA_lin_sent3a <- lm(formula=as.formula(paste("polarity_classif",paste(predictors[c(6:9)],
+                                                              collapse="+"),sep="~")),
+                    data = CA_data,
+                    family = "gaussian")
+summary(CA_lin_sent3)
+summary(CA_lin_sent3a)
+```
+```{r}
+# all
+CA_lin_sent4 <- lm(formula=as.formula(paste("polarity_classif",paste(predictors[c(3,5,6:9)],
+                                                              collapse="+"),sep="~")),
+                    data = CA_data,
+                    family = "gaussian")
+summary(CA_lin_sent4)
+```
+
+# ridge/lasso/elastic regression?
+```{r}
+
+```
+
+#
