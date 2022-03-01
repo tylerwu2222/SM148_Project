@@ -40,6 +40,48 @@ p
 
 
 
+# trying data in LA:
+LA = df[df.city_and_state =="Los Angeles, California"]
+LA.head()
+contigency = pd.crosstab(LA['Face_Masks_Required_in_Public'], LA['polarity_classif'])
+contigency
+
+# Chi-square:
+c, p, dof, expected = chi2_contingency(contigency)
+p
+# p-value in this case is 0.7898387158846932, we do not reject null hypothesis; there is no relationship between mask mandates and sentiment.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
