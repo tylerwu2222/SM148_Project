@@ -17,25 +17,20 @@ from sklearn.linear_model import LogisticRegression
 
 
 # read data:
-df = pd.read_csv("C:/ucla/m148/SM148_project/complete_data.csv")
+df = pd.read_csv("C:/ucla/m148/SM148_project/complete_data/complete_data_sentiment.csv")
 len(df.index)
 
 pd.set_option('display.max_columns', None) # <- just to display all the columes
 
 df.head()
 
-# Split Polarity into three categories, save as a addition column (-1 to 0: negative; 0 to 1: positive):
-df['Pol_cat'] = 0 # neutral
-df.loc[df['Polarity'] < 0, 'Pol_cat'] = -1 # negative
-df.loc[df['Polarity'] > 0, 'Pol_cat'] = 1 # positive
-df.head()
 
 df['masks_num'] = 0
 df.loc[df['mentions_mask'] == True, 'masks_num'] = 1 
 df['required_masks'] = 0
 df.loc[df['Face_Masks_Required_in_Public'] == 'Yes', 'required_masks'] = 1 
 
-x, y = df[['masks_num', 'required_masks']], df['Pol_cat']
+x, y = df[['masks_num', 'required_masks']], df['polarity_classif']
 x.shape
 
 
