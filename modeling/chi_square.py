@@ -8,13 +8,15 @@ from scipy.stats import chi2_contingency
 
 # read the data "complete_data_sentiment":
 df = pd.read_csv("C:/ucla/m148/SM148_project/complete_data/complete_data_sentiment.csv")
-pd.set_option('display.max_columns', None) # <- just to display all the columes
+pd.set_option('display.max_columns', None) # <- to display all the columes
 
 df.head()
+# create a contigency(frequency) table for chi-square test
 contigency = pd.crosstab(df['Face_Masks_Required_in_Public'], df['polarity_classif2'])
+# display the contigency table
 contigency
 
-# Chi-square:
+# Apply Chi-square test:
 c, p, dof, expected = chi2_contingency(contigency)
 p
 # p-value in this case is 8.07234507356557e-05, we reject the null hypothesis; 
