@@ -18,7 +18,7 @@ contigency
 
 # Apply Chi-square test:
 c, p, dof, expected = chi2_contingency(contigency)
-print("The p-value for Chi-square test is:", p)
+p
 # p-value in this case is 8.07234507356557e-05, we reject the null hypothesis; 
 # there is a relationship between mask mandates and sentiment in the U.S.
 
