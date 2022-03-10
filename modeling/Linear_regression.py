@@ -17,19 +17,26 @@ df.head()
 
 sample = df[['Confirmed','Face_Masks_Required_in_Public', 'likes', 'retweets', 'mentions_mask', 'polarity_compound']]
 sample = sample.dropna()
-x = sample[['Confirmed', 'Face_Masks_Required_in_Public', 'likes', 'retweets', 'mentions_mask']]
+# compute the weight by using likes/retweets:
+sample['weight'] = sample['likes']/sample['retweets']
+sample.head()
+sample.replace([np.inf, -np.inf], np.nan, inplace=True)
+sample = sample.dropna()
+
+x = sample[['Confirmed', 'Face_Masks_Required_in_Public', 'weight', 'mentions_mask']]
 x
+
 
 
 # coerce Face_Masks_Required_in_Public variable to numerical as mask_mandate:
 x['mask_mandate'] = 0
 x.loc[x['Face_Masks_Required_in_Public'] == 'Yes', 'mask_mandate'] = 1
-x = x[['Confirmed', 'mask_mandate', 'likes', 'retweets', 'mentions_mask']]
+x = x[['Confirmed', 'mask_mandate', 'weight', 'mentions_mask']]
 x
 # coerce mask_mandate variable to numerical:
 x['mentions_mask_num'] = 0
 x.loc[x['mentions_mask'] == 'True', 'mentions_mask_num'] = 1
-x = x[['Confirmed', 'mask_mandate', 'likes', 'retweets', 'mentions_mask_num']]
+x = x[['Confirmed', 'mask_mandate', 'weight', 'mentions_mask_num']]
 x
 
 y = sample[['polarity_compound']]
